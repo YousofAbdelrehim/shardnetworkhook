@@ -2,7 +2,9 @@ function handleSearch() {
     var searchInput = document.getElementById('searchInput');
     var searchTerm = searchInput.value.trim();
     if (searchTerm === '') {
-        alert('Please enter a search term.');
+        document.getElementById('searchError').innerText = "Please Enter a search term!";
+        document.getElementById('searchError').style.display = 'block';
+        document.getElementById('searchError').style.animation = 'errorShake 0.5s ease';
         return;
     }
     var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
