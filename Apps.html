@@ -12,7 +12,6 @@
             padding: 0;
             background-color: #222;
             color: #fff;
-            overflow: hidden; /* Hide overflow to prevent scrollbars due to animation */
         }
         nav {
             display: flex;
@@ -300,6 +299,34 @@
             <img src="https://cdn2.iconfinder.com/data/icons/ios7-inspired-mac-icon-set/512/Calculator_512.png" alt="">
             <h3>Calculator</h3>
         </div>
+        <div class="app" onclick="loadApps('https://discord.com')";>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEoDkusPLrzvK4GIIFZL6_PwTUKlQEKDcAbSe8aVcIUw&s" alt="">
+            <h3>Discord</h3>
+        </div>
+        <div class="app" onclick="loadApps('https://github.com')";>
+            <img src="https://cdn.pixabay.com/photo/2022/01/30/13/33/github-6980894_1280.png" alt="">
+            <h3>Github</h3>
+        </div>
+        <div class="app" onclick="loadApps('https://amazon.com')";>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToEqyzmWneHEmjrjpo1YFvKVG5dynn7ZFgNVGrpnuc3A&s" alt="">
+            <h3>Amazon</h3>
+        </div>
+        <div class="app" onclick="loadApps('https://google.com')";>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" alt="">
+            <h3>Google</h3>
+        </div>
+        <div class="app" onclick="loadApps('https://vscode.dev')";>
+            <img src="https://chris-ayers.com/assets/images/vscode-logo.png" alt="">
+            <h3>VSCode</h3>
+        </div>
+        <div class="app" onclick="loadApps('https://coolmathgames.com')";>
+            <img src="https://ih1.redbubble.net/image.1896622144.7959/mo,small,flatlay,product_square,600x600.jpg" alt="">
+            <h3>Coolmathgames</h3>
+        </div>
+        <div class="app" onclick="loadApps('https://play.geforcenow.com/mall/#/loginwall')";>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKFNBudm39rtb0Ri3PiUoRUClCK8DlE6dAlwtmYN3fzQ&s" alt="">
+            <h3>Geforce NOW</h3>
+        </div>
     </div>
     </div>
         <div class="bubbles-container">
@@ -333,6 +360,75 @@
 
         // Call the generateBubbles function when the DOM content is loaded
         document.addEventListener('DOMContentLoaded', generateBubbles);
+    </script>
+    <script>
+        async function loadApps(url) {
+            const contentDiv = document.createElement('div');
+            contentDiv.style.position = 'fixed';
+            contentDiv.style.top = '0';
+            contentDiv.style.left = '0';
+            contentDiv.style.width = '100%';
+            contentDiv.style.height = '100%';
+            contentDiv.style.zIndex = '9999';
+            contentDiv.id = 'contentDiv';
+            contentDiv.style.backgroundColor = '#fff'; // Set background color if NEEDED!
+            const fetchURL = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+            const response = await fetch(fetchURL);
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch website content');
+            }
+
+            const responseData = await response.text();
+
+            // Attempt to parse the response text as JSON
+            let data;
+            try {
+                data = JSON.parse(responseData);
+            } catch (parseError) {
+                throw new Error('Failed to parse JSON response');
+            }
+
+            // Check if the response contains valid JSON data
+            if (!data || typeof data !== 'object' || !('contents' in data)) {
+                throw new Error('Invalid response format');
+            }
+
+            // Check if the contents are empty
+            if (!data.contents.trim()) {
+                throw new Error('Empty response');
+            }
+
+            // Log the fetched website content to the console
+            console.log(data.contents);
+            contentDiv.innerHTML = data.contents;
+            const links = contentDiv.getElementsByTagName('a');
+            for (let i = 0; i < links.length; i++) {
+                links[i].onclick = function () {
+                    loadApps(this.href);
+                    console.log(this.href);
+                    return false;
+                }
+            }
+            const stylesheets = contentDiv.getElementsByTagName('link');
+            for (let i = 0; i < stylesheets.length; i++) {
+             
+                stylesheets[i].onload = function () {
+                    loadApps(this.href);
+                    console.log(this.href);
+                    return false;
+                }
+            }
+            const JavaScript = contentDiv.getElementsByTagName('script');
+            for (let i = 0; i < JavaScript.length; i++) {
+                JavaScript[i].onload = function () {
+                    loadApps(this.src);
+                    console.log(this.src);
+                    return false;
+                }
+            }
+            document.body.appendChild(contentDiv);
+        }
     </script>
     <script src="Javascript/fileloader.js"></script>
 </body>
